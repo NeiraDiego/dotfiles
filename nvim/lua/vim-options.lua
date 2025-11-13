@@ -17,13 +17,14 @@ vim.keymap.set('n', '<c-l>', ':wincmd l<CR>')
 vim.keymap.set('n', '<leader>pv', ':vs<CR>')
 vim.keymap.set('n', '<leader>ph', ':sp<CR>')
 vim.keymap.set('n', '<leader>conf', ':e ~/.config/nvim/lua/vim-options.lua<CR>')
+vim.keymap.set('n', '<leader>bn', ':bn<CR>')
+vim.keymap.set('n', '<leader>bp', ':bp<CR>')
 
 vim.keymap.set('n', '<leader>h', ':nohlsearch<CR>')
 vim.keymap.set('n', '<leader>ee', ':Neotree toggle<CR>')
 vim.keymap.set('n', '<leader>ww', ':w<CR>')
 vim.keymap.set('n', '<leader>qq', ':q!<CR>')
 vim.keymap.set('n', '<leader>wq', ':wq<CR>')
-vim.keymap.set('n', '<leader>bn', ':bn<CR>')
 
 -- lsp warnings hide or show
 vim.keymap.set('n', '<leader>wh', ':lua vim.diagnostic.config({virtual_text=false})<CR>')
