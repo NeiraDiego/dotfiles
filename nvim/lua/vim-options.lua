@@ -19,7 +19,7 @@ vim.keymap.set('n', '<leader>ph', ':sp<CR>')
 vim.keymap.set('n', '<leader>conf', ':e ~/.config/nvim/lua/vim-options.lua<CR>')
 
 vim.keymap.set('n', '<leader>h', ':nohlsearch<CR>')
-vim.keymap.set('n', '<leader>ee', ':Neotree filesystem reveal left<CR>')
+vim.keymap.set('n', '<leader>ee', ':Neotree toggle<CR>')
 vim.keymap.set('n', '<leader>ww', ':w<CR>')
 vim.keymap.set('n', '<leader>qq', ':q!<CR>')
 vim.keymap.set('n', '<leader>wq', ':wq<CR>')
