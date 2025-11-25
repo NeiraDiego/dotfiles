@@ -32,6 +32,10 @@ completions=(
 aliases=(
   general
 )
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias gitdot='cd ~/dotfiles && git add .'
 plugins=(
   git
   bashmarks
