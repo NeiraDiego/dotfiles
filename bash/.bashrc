@@ -19,6 +19,9 @@ case $(hostname) in
     ;;
 esac
 
+# Activar mostrar ambientes de Python/Conda
+OMB_PROMPT_SHOW_PYTHON_VENV=true
+
 OSH_THEME="rr"
 OMB_USE_SUDO=true
 completions=(
