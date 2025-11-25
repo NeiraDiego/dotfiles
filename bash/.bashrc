@@ -4,6 +4,47 @@ case $- in
 esac
 export OSH='/home/diego/.oh-my-bash'
 
+# hace add, commit y push de los archivos dot
+dotcommit() {
+    local prev_dir=$(pwd)
+    cd ~/dotfiles || return 1
+    
+    # Agregar todos los cambios
+    git add .
+    
+    # Mostrar el estado
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Archivos modificados:"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    git status --short
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    
+    # Pedir el mensaje de commit
+    echo -n "Mensaje del commit: "
+    read commit_message
+    
+    # Verificar que no esté vacío
+    if [ -z "$commit_message" ]; then
+        echo "❌ Commit cancelado: mensaje vacío"
+        cd "$prev_dir"
+        return 1
+    fi
+    
+    # Hacer commit y push
+    git commit -m "$commit_message"
+    
+    if [ $? -eq 0 ]; then
+        echo "Haciendo push..."
+        git push
+        echo "✅ Dotfiles actualizados!"
+    else
+        echo "❌ Error en el commit"
+    fi
+    
+    cd "$prev_dir"
+}
+
+
 case $(hostname) in
   "diegoUbuntuL")
     MACHINE_ICON="🏠"
