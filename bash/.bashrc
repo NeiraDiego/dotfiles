@@ -77,6 +77,7 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 alias gitdot='cd ~/dotfiles && git add .'
+alias n='nvim .'
 plugins=(
   git
   bashmarks
