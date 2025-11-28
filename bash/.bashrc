@@ -52,7 +52,7 @@ case $(hostname) in
   "orangepi5")
     MACHINE_ICON="🍊"
     ;;
-  "DiegoNB")
+  "DNS-NB")
     MACHINE_ICON="💻"
     ;;
   *)
