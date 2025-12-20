@@ -107,3 +107,4 @@ function _omb_theme_PROMPT_COMMAND() {
   PS1+=${scm_info:+$scm_info }
   PS1+=$_omb_prompt_normal
 }
+export PATH="$HOME/.local/bin:$PATH"
