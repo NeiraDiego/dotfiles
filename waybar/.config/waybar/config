@@ -1,7 +1,7 @@
 {
     "modules-left": ["hyprland/workspaces", "hyprland/mode"],
     "modules-center": ["clock", "idle_inhibitor"],
-    "modules-right": ["tray", "custom/bluetooth", "custom/scratchpad-indicator", "pulseaudio", "custom/power"],
+    "modules-right": ["tray", "custom/bluetooth", "custom/scratchpad-indicator", "pulseaudio", "battery", "custom/power"],
 
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
@@ -25,10 +25,11 @@
         "spacing": 10
     },
     "clock": {
-        // "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        // "format-alt": "{:%Y-%m-%d}"
+        "format": "{:%d %b %H:%M}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%A, %d de %B de %Y}",
 		    "on-click": "gnome-calendar"
-    }, 
+    },
     "custom/bluetooth": {
         "format": "", // Icono Bluetooth
         "tooltip": "Bluetooth", // descripcion en mouse hover
@@ -53,6 +54,16 @@
             "default": ["", "", ""]
         },
         "on-click": "pavucontrol"
+    },
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-icons": ["", "", "", "", ""]
     },
 	"custom/power": {
 		"format": " ",

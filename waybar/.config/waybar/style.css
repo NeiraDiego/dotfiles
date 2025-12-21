@@ -1,6 +1,6 @@
 * {
     border: none;
-    font-family: Font Awesome, Roboto, Arial, sans-serif;
+    font-family: "JetBrainsMono Nerd Font", Font Awesome, Roboto, Arial, sans-serif;
     font-size: 13px;
     color: #ffffff;
     border-radius: 20px;
@@ -65,6 +65,12 @@ window#waybar {
     padding: 1px 1px 1px 6px;
 }
 /*-----Indicators----*/
+#battery {
+    background-color: rgba(0,85,102,0.85);
+    border-radius: 20px;
+    margin: 5px 5px;
+    padding: 0 12px;
+}
 #idle_inhibitor.activated {
     color: #2dcc36;
 }
