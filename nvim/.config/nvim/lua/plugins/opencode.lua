@@ -3,7 +3,25 @@ return {
     "nickjvandyke/opencode.nvim",
     version = "*",
     init = function()
-      vim.g.opencode_opts = vim.g.opencode_opts or {}
+      vim.g.opencode_opts = vim.tbl_deep_extend("force", vim.g.opencode_opts or {}, {
+        server = {
+          start = function()
+            require("opencode.terminal").open("opencode --port", {
+              split = "right",
+              width = math.floor(vim.o.columns * 0.35),
+            })
+          end,
+          stop = function()
+            require("opencode.terminal").close()
+          end,
+          toggle = function()
+            require("opencode.terminal").toggle("opencode --port", {
+              split = "right",
+              width = math.floor(vim.o.columns * 0.35),
+            })
+          end,
+        },
+      })
     end,
     keys = {
       {
