@@ -3,7 +3,7 @@ return {
     'nvim-telescope/telescope.nvim',
     tag = '0.1.8',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    -- Keymaps configurados en lua/vim-options.lua
+    -- Keymaps configurados en lua/config/keymaps.lua
   },
   {
     'nvim-telescope/telescope-ui-select.nvim',

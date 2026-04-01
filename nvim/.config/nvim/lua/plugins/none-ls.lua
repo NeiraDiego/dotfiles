@@ -9,6 +9,6 @@ return {
         null_ls.builtins.formatting.isort,
       },
     })
-    -- Keymap configurado en lua/vim-options.lua
+    -- Keymap configurado en lua/config/keymaps.lua
   end,
 }

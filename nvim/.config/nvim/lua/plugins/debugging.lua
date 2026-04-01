@@ -24,6 +24,6 @@ return {
 		dap.listeners.before.event_exited.dapui_config = function()
 			dapui.close()
 		end
-		-- Keymaps configurados en lua/vim-options.lua
+		-- Keymaps configurados en lua/config/keymaps.lua
 	end,
 }

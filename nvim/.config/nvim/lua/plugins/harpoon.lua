@@ -2,7 +2,7 @@ return {
     "ThePrimeagen/harpoon",
     branch = "harpoon2",
     dependencies = { "nvim-lua/plenary.nvim" },
-    -- Keymaps configurados en lua/vim-options.lua
+    -- Keymaps configurados en lua/config/keymaps.lua
 }
       -- vim.keymap.set('n', '<C-n>', ':Neotree filesystem reveal left<CR>', {})
 -- -- List of favorite files/marks per project

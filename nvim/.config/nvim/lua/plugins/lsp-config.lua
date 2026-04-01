@@ -39,7 +39,7 @@ return {
       vim.lsp.enable('lua_ls')
       vim.lsp.enable('pyright')
 
-      -- Keymaps configurados en lua/vim-options.lua
+      -- Keymaps configurados en lua/config/keymaps.lua
     end
   },
 }
