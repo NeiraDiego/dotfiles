@@ -1,0 +1,53 @@
+* {
+    font-family: "JetBrainsMono Nerd Font", "FiraCode Nerd Font", monospace;
+    font-size: 16px;
+}
+
+window {
+    background-color: rgba(30, 30, 46, 0.85);
+    border-radius: 12px;
+    border: 2px solid rgba(69, 71, 90, 0.6);
+}
+
+outer-box {
+    background-color: transparent;
+    margin: 6px;
+}
+
+input {
+    background-color: rgba(49, 50, 68, 0.7);
+    color: #cdd6f4;
+    border-radius: 8px;
+    border: none;
+    padding: 6px 12px;
+    margin: 0 0 8px 0;
+}
+
+input:focus {
+    background-color: rgba(49, 50, 68, 0.9);
+    border: 1px solid rgba(137, 180, 250, 0.4);
+}
+
+entry {
+    background-color: transparent;
+    color: #cdd6f4;
+    border-radius: 6px;
+    padding: 6px 12px;
+}
+
+entry:selected {
+    background-color: rgba(137, 180, 250, 0.2);
+    color: #89b4fa;
+}
+
+label {
+    color: #cdd6f4;
+}
+
+label:selected {
+    color: #89b4fa;
+}
+
+#input-label {
+    color: #6c7086;
+}

@@ -1,0 +1,10 @@
+width=500
+height=400
+location=center
+prompt=Search
+allow_markup=true
+no_actions=true
+halign=fill
+orientation=vertical
+content_halign=fill
+hide_search=false

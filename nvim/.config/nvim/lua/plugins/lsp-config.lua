@@ -9,7 +9,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "pyright" }
+        ensure_installed = { "lua_ls", "pyright", "clangd" }
       })
     end
   },
@@ -35,9 +35,18 @@ return {
         capabilities = capabilities,
       }
 
+      -- Configuración para clangd usando la nueva API de Neovim 0.11+
+      vim.lsp.config.clangd = {
+        cmd = { "clangd", "--background-index", "--clang-tidy", "--header-insertion=iwyu" },
+        filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+        root_markers = { "compile_commands.json", "compile_flags.txt", ".git", "CMakeLists.txt" },
+        capabilities = capabilities,
+      }
+
       -- Habilitar los servidores LSP
       vim.lsp.enable('lua_ls')
       vim.lsp.enable('pyright')
+      vim.lsp.enable('clangd')
 
       -- Keymaps configurados en lua/config/keymaps.lua
     end
