@@ -1,10 +1,10 @@
 {
-    "modules-left": ["hyprland/workspaces", "hyprland/mode"],
+    "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock", "idle_inhibitor"],
     "modules-right": ["tray", "custom/bluetooth", "custom/scratchpad-indicator", "pulseaudio", "battery", "custom/power"],
 
-    "sway/mode": {
-        "format": "<span style=\"italic\">{}</span>"
+    "hyprland/workspaces": {
+        "format": "{name}",
     },
     "network": {
         "format-wifi": "{essid} ({signalStrength}%) ",
@@ -18,7 +18,7 @@
         "format-icons": {
             "activated": "",
             "deactivated": ""
-        },
+        }
     },
     "tray": {
         "icon-size": 15,

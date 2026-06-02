@@ -287,6 +287,8 @@ hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("brave-browser"))
 hl.bind(mainMod .. " + X", hl.dsp.exec_cmd("gnome-calculator"))
 hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd("~/.config/hypr/scripts/show-keybinds.sh"))
 hl.bind(mainMod .. " + ALT + P", hl.dsp.exec_cmd("~/.config/hypr/scripts/toggle-edp.sh"))
+hl.bind(mainMod .. " + SPACE",     hl.dsp.exec_cmd("~/.config/hypr/scripts/quick-ask.sh mini"))
+hl.bind(mainMod .. " + ALT + SPACE", hl.dsp.exec_cmd("~/.config/hypr/scripts/quick-ask.sh pro"))
 
 -- Move focus with mainMod + HJKL
 hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
@@ -423,3 +425,10 @@ hl.window_rule({
     move  = "20 monitor_h-120",
     float = true,
 })
+
+-- Nombres de workspaces para waybar (q/w/e/r/t)
+hl.workspace_rule({ workspace = "1", default_name = "q" })
+hl.workspace_rule({ workspace = "2", default_name = "w" })
+hl.workspace_rule({ workspace = "3", default_name = "e" })
+hl.workspace_rule({ workspace = "4", default_name = "r" })
+hl.workspace_rule({ workspace = "5", default_name = "t" })

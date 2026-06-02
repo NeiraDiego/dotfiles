@@ -2,41 +2,57 @@
     border: none;
     font-family: "JetBrainsMono Nerd Font", Font Awesome, Roboto, Arial, sans-serif;
     font-size: 13px;
-    color: #ffffff;
-    border-radius: 20px;
+    color: #cdd6f4;
 }
 
 window {
-	/*font-weight: bold;*/
+    /*font-weight: bold;*/
 }
 window#waybar {
     background: rgba(0, 0, 0, 0);
 }
 /*-----module groups----*/
 .modules-right {
-	background-color: rgba(0,43,51,0.85);
+    background-color: rgba(30, 30, 46, 0.85);
+    border-radius: 20px;
     margin: 2px 10px 0 0;
+    padding: 0 0 0 7px;
 }
 .modules-center {
-	background-color: rgba(0,43,51,0.85);
+    background-color: rgba(30, 30, 46, 0.85);
+    border-radius: 20px;
     margin: 2px 0 0 0;
+    padding: 0 7px 0 0;
 }
 .modules-left {
     margin: 2px 0 0 5px;
-	background-color: rgba(0,119,179,0.6);
+    background-color: rgba(30, 30, 46, 0.85);
+    border-radius: 20px;
 }
 /*-----modules indv----*/
 #workspaces button {
     padding: 1px 5px;
     background-color: transparent;
+    color: #a6adc8;
 }
 #workspaces button:hover {
     box-shadow: inherit;
-	background-color: rgba(0,153,153,1);
+    background-color: rgba(137, 180, 250, 0.15);
+    color: #89b4fa;
 }
-
-#workspaces button.focused {
-	background-color: rgba(0,43,51,0.85);
+#workspaces button.active {
+    background-color: rgba(137, 180, 250, 0.25);
+    color: #89b4fa;
+}
+#workspaces button.urgent {
+    background-color: rgba(243, 139, 168, 0.25);
+    color: #f38ba8;
+}
+#workspaces button.empty {
+    color: #45475a;
+}
+#workspaces button.persistent {
+    color: #6c7086;
 }
 
 #clock,
@@ -55,44 +71,47 @@ window#waybar {
     padding: 0 10px;
 }
 #mode {
-    color: #cc3436;
+    color: #f38ba8;
     font-weight: bold;
 }
 #custom-power {
-    background-color: rgba(0,119,179,0.6);
+    background-color: rgba(203, 166, 247, 0.2);
+    color: #cba6f7;
     border-radius: 100px;
     margin: 5px 5px;
     padding: 1px 1px 1px 6px;
 }
 /*-----Indicators----*/
 #battery {
-    background-color: rgba(0,85,102,0.85);
+    background-color: rgba(49, 50, 68, 0.7);
     border-radius: 20px;
     margin: 5px 5px;
     padding: 0 12px;
 }
 #idle_inhibitor.activated {
-    color: #2dcc36;
+    color: #a6e3a1;
 }
 #pulseaudio.muted {
-    color: #cc3436;
+    color: #f38ba8;
 }
 #battery.charging {
-    color: #2dcc36;
+    color: #a6e3a1;
 }
 #battery.warning:not(.charging) {
-	color: #e6e600;
+    color: #f9e2af;
 }
 #battery.critical:not(.charging) {
-    color: #cc3436;
+    color: #f38ba8;
 }
 #temperature.critical {
-    color: #cc3436;
+    color: #f38ba8;
 }
-/*-----Colors----*/
-/*
- *rgba(0,85,102,1),#005566 --> Indigo(dye)
- *rgba(0,43,51,1),#002B33 --> Dark Green 
- *rgba(0,153,153,1),#009999 --> Persian Green 
- *
- */
+
+tooltip {
+    background: rgba(30, 30, 46, 0.95);
+    border: 1px solid rgba(69, 71, 90, 0.6);
+    border-radius: 8px;
+}
+tooltip label {
+    color: #cdd6f4;
+}
