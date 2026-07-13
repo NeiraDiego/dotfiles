@@ -8,8 +8,6 @@ Instalar [oh-my-bash.sh](https://github.com/ohmybash/oh-my-bash)
 Instalar [Nerd Fonts](https://www.nerdfonts.com/)
 Para neovim:
 ``` bash
-sudo add-apt-repository ppa:neovim-ppa/unstable
-sudo apt update
-sudo apt install neovim
+sudo pacman -S neovim
 ```
 

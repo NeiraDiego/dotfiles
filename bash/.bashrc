@@ -45,14 +45,14 @@ dotcommit() {
 }
 
 
-case $(hostname) in
+case "$HOSTNAME" in
   "diegoUbuntuL")
     MACHINE_ICON="🏠"
     ;;
   "orangepi5")
     MACHINE_ICON="🍊"
     ;;
-  "DNS-NB")
+  "DNS-NB"|"DiegoNB")
     MACHINE_ICON="💻"
     ;;
   *)

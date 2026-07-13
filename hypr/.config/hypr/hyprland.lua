@@ -33,15 +33,15 @@ hl.monitor({
 
 -- DP-1 izquierda, eDP-1 derecha (ajustar posición X de eDP-1 según resolución real de DP-1)
 hl.monitor({
-    output   = "DP-1",
+    output   = "DP-3",
     mode     = "preferred",
-    position = "0x0",
+    position = "-1920x0",
     scale    = 1,
 })
 hl.monitor({
     output   = "eDP-1",
     mode     = "preferred",
-    position = "1920x0",
+    position = "0x0",
     scale    = 1.175,
 })
 
@@ -51,7 +51,7 @@ hl.monitor({
 ---------------------
 
 -- Set programs that you use
-local terminal    = "ghostty"
+local terminal    = "kitty"
 local fileManager = "dolphin"
 local menu        = "wofi --show drun"
 
@@ -65,7 +65,7 @@ local menu        = "wofi --show drun"
 hl.on("hyprland.start", function ()
     hl.exec_cmd("waybar")
     hl.exec_cmd("~/.config/hypr/scripts/wallpaper-carousel.sh")
-    hl.exec_cmd("brave-browser")
+    hl.exec_cmd("brave")
     hl.exec_cmd(terminal .. " -e tmux")
 end)
 
@@ -274,19 +274,30 @@ hl.device({
 
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
+-- Toggle eDP-1 laptop monitor
+function toggleEDP()
+  local mon = hl.get_monitor("eDP-1")
+  if mon ~= nil and not mon.disabled then
+    hl.monitor({ output = "eDP-1", disabled = true })
+  else
+    hl.monitor({ output = "eDP-1", disabled = false, mode = "preferred", position = "0x0", scale = 1.175 })
+  end
+end
+
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + C", hl.dsp.window.close())
-hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
+hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("obsidian"))
+hl.bind(mainMod .. " + ALT + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + F", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + N", hl.dsp.layout("togglesplit"))    -- dwindle only
-hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("brave-browser"))
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("brave"))
 hl.bind(mainMod .. " + X", hl.dsp.exec_cmd("gnome-calculator"))
 hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd("~/.config/hypr/scripts/show-keybinds.sh"))
-hl.bind(mainMod .. " + ALT + P", hl.dsp.exec_cmd("~/.config/hypr/scripts/toggle-edp.sh"))
+hl.bind(mainMod .. " + ALT + P", toggleEDP)
 hl.bind(mainMod .. " + SPACE",     hl.dsp.exec_cmd("~/.config/hypr/scripts/quick-ask.sh mini"))
 hl.bind(mainMod .. " + ALT + SPACE", hl.dsp.exec_cmd("~/.config/hypr/scripts/quick-ask.sh pro"))
 
@@ -362,7 +373,7 @@ hl.window_rule({
     size              = "448 252",
     keep_aspect_ratio = true,
     no_dim            = true,
-    no_border         = true,
+--    no_border         = true,
     no_shadow         = true,
 })
 

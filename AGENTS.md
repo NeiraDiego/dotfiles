@@ -11,6 +11,7 @@ stow kitty     # ~/.config/kitty/
 stow nvim      # ~/.config/nvim/
 stow tmux      # ~/.tmux.conf
 stow waybar    # ~/.config/waybar/
+stow wofi      # ~/.config/wofi/
 ```
 
 Run `stow -D <pkg>` to unlink, `stow -R <pkg>` to relink.
@@ -19,83 +20,63 @@ Run `stow -D <pkg>` to unlink, `stow -R <pkg>` to relink.
 
 | File | Role |
 |---|---|
-| `AGENTS.md` | **Primary reference** for Hyprland config — monitors, keybinds, window rules, autostart, waybar |
 | `hypr/.config/hypr/hyprland.conf` | Hyprland native config |
-| `hypr/.config/hypr/hyprland.lua` | Hyprland Lua config — must be kept in sync with `.conf` |
-| `hypr/.config/hypr/scripts/` | `show-keybinds.sh`, `toggle-edp.sh` |
+| `hypr/.config/hypr/hyprland.lua` | Hyprland Lua config — **must be kept in sync with `.conf`** |
+| `hypr/.config/hypr/scripts/` | `show-keybinds.sh`, `toggle-edp.sh`, `wallpaper-carousel.sh`, `quick-ask.sh` |
+| `hypr/CONTEXT.md` | Redirect stub (content migrated here) |
 | `bash/.bashrc` | oh-my-bash, custom `dotcommit` (git add+commit+push), `gitdot` alias |
 | `nvim/.config/nvim/init.lua` | lazy.nvim entrypoint, modules in `lua/config/` and `lua/plugins/` |
-| `tmux/.tmux.conf` | TPM plugins (catppuccin, vim-tmux-navigator), run `Prefix + I` after fresh clone |
+| `tmux/.tmux.conf` | TPM plugins (catppuccin, vim-tmux-navigator) |
 | `waybar/.config/waybar/` | `config` (JSON), `style.css`, `scripts/powermenu.sh` |
 | `kitty/.config/kitty/` | `kitty.conf` + `catppuccin/` subtheme |
+| `wofi/.config/wofi/` | `config`, `style.css` (Catppuccin Mocha theme) |
 
 ## Hyprland
 
-- **Keep both config files in sync** — changes to keybinds, monitors, window rules must go in both `hyprland.conf` and `hyprland.lua`
+**Critical**: any change to keybinds, monitors, or window rules must go in **both** `hyprland.conf` and `hyprland.lua`.
 
-### Archivos activos
-- **`hyprland.conf`** — Configuración tradicional (formato Hyprland nativo)
-- **`hyprland.lua`** — Configuración en Lua (más moderna, completa)
-- **`scripts/`** — Scripts auxiliares (`show-keybinds.sh`, `toggle-edp.sh`)
+### Monitors
+- `DP-1` (external, left): preferred, 0x0, scale 1
+- `eDP-1` (laptop, right): preferred, 1920x0, scale 1.175
 
-### Monitores
-- `DP-1` (externo, izquierda): preferred, 0x0, scale 1
-- `eDP-1` (laptop, derecha): preferred, 1920x0, scale 1.175
-
-### Autostart (orden)
+### Autostart (order)
 1. `waybar`
-2. `brave-browser` → workspace 1
+2. `brave` → workspace 1
 3. `ghostty -e tmux` → workspace 2
 
-### Keybindings principales
+### Keybindings
 - `SUPER + A` → terminal (ghostty)
-- `SUPER + B` → brave-browser
+- `SUPER + B` → brave
 - `SUPER + D` → dolphin
 - `SUPER + F` → wofi (drun)
 - `SUPER + X` → gnome-calculator
-- `SUPER + C` → cerrar ventana
+- `SUPER + C` → close window
 - `SUPER + V` → toggle floating
-- `SUPER + M` → salir
-- `SUPER + Z` → mostrar keybinds
+- `SUPER + M` → exit
+- `SUPER + Z` → show keybinds
 - `SUPER + ALT + P` → toggle eDP-1
-- `SUPER + H/J/K/L` → mover foco (izq/abajo/arriba/der)
+- `SUPER + H/J/K/L` → move focus (left/down/up/right)
 - `SUPER + Q/W/E/R/T/6-0` → workspaces 1-10
-- `SUPER + SHIFT + Q/W/E/R/T/6-0` → mover ventana a workspace
+- `SUPER + SHIFT + Q/W/E/R/T/6-0` → move window to workspace
 - `SUPER + S` → scratchpad (special:magic)
-- Multimedia keys: volumen (wpctl), brillo (brightnessctl), playback (playerctl)
-- `SUPER + mouse:272` → mover ventana, `SUPER + mouse:273` → redimensionar
+- Multimedia: volume (wpctl), brightness (brightnessctl), playback (playerctl)
+- `SUPER + mouse:272` → move window, `SUPER + mouse:273` → resize
 
 ### Workspace rules
 - `brave` / `brave-browser` (class: `^(brave|brave-browser)$`) → workspace 1
 - `com.mitchellh.ghostty` → workspace 2
 
 ### Window rules
-- PiP de Brave/Chromium (title: `^Picture in picture$`): `float`, `pin`, posición `4% 60%` (abajo-izquierda), tamaño `448x252` (~70% del original), `keepaspectratio`, `nodim`, `noborder`, `noshadow`
-- `org.gnome.Calculator`: `float`
+- Brave/Chromium PiP (title: `^Picture in picture$`): float, pin, position `4% 60%`, size `448x252`, keepaspectratio, nodim, noborder, noshadow
+- `org.gnome.Calculator`: float
 
 ### Layout
-- dwindle con pseudotile y preserve_split
-- Border radius: 10px, blur activo
-- Animaciones configurables por curva Bezier/spring (Lua)
+- dwindle with pseudotile and preserve_split
+- Border radius: 10px, blur active
 
 ### Waybar
-- **Config**: `waybar/.config/waybar/config` — Barra con workspaces (izq), clock/idle_inhibitor (centro), y system-tray/pulseaudio/botón power (der)
-- **Style**: `waybar/.config/waybar/style.css` — Tema Catppuccin Mocha:
-  - Fondo: `rgba(30, 30, 46, 0.85)` (base)
-  - Texto: `#cdd6f4`
-  - Workspace activo: azul `#89b4fa` con overlay
-  - Power button: lila `#cba6f7` con overlay
-  - Estados: verde (battery charging, idle activado), amarillo (battery warning), rojo (battery critical, pulseaudio muted, temperature critical)
-  - Tooltips: fondo base 95% con borde surface0
-- **Módulos**: workspaces se sincroniza vía IPC de Hyprland
-
-### Cambios recientes
-- **Waybar CSS → Catppuccin Mocha**: Se reemplazó el tema anterior (verde oscuro/azul) por Catppuccin Mocha para coincidir con wofi. Se eliminó `hyprland/mode` de modules-left (no existe en waybar v0.12) y `sway/mode` del config. Fecha: 2026-06-01
-- **Zen Browser → Brave**: Se reemplazó Zen por Brave en:
-  - Autostart (`exec-once` / `hl.exec_cmd`)
-  - Keybinding `SUPER + B`
-  - Window rule de workspace 1
-  - Fecha: 2026-05-19
+- **Config**: `waybar/.config/waybar/config` — workspaces (left), clock/idle_inhibitor (center), system-tray/pulseaudio/power button (right)
+- **Style**: `waybar/.config/waybar/style.css` — Catppuccin Mocha theme, workspaces synced via Hyprland IPC
 
 ## Neovim
 
@@ -104,11 +85,6 @@ Run `stow -D <pkg>` to unlink, `stow -R <pkg>` to relink.
 - Plugins: `lua/plugins/*.lua` (13 plugins)
 - OpenCode integration via `opencode.nvim` with `<leader>a*` keymaps
 
-## Pre-existing instruction files
-
-### `AGENTS.md` (this file)
-Hyprland-specific context under the ## Hyprland section (monitors, keybinds, autostart, window rules, layout, waybar). Agents editing hyprland config should read this first.
-
 ## Git
 
 ```bash
@@ -116,10 +92,32 @@ gitdot    # alias: cd ~/dotfiles && git add .
 dotcommit # interactive: git add . → git commit → git push
 ```
 
+## Fonts
+
+- Sans-serif fallback `FreeSans` has poor kerning causing wide number spacing in web apps (e.g., Odoo in Brave).
+- Fix: installed `noto-fonts`, `ttf-dejavu`, `ttf-liberation` and set Noto Sans as preferred sans-serif in `~/.config/fontconfig/fonts.conf`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+<fontconfig>
+  <alias>
+    <family>sans-serif</family>
+    <prefer>
+      <family>Noto Sans</family>
+      <family>DejaVu Sans</family>
+      <family>Liberation Sans</family>
+    </prefer>
+  </alias>
+</fontconfig>
+```
+
+After changes, run `fc-cache -fv` and restart Brave.
+
 ## Gotchas
 
 - `lazy-lock.json` is gitignored (nvim lazy.nvim lockfile, intentionally untracked)
 - `bashrc-omb-bk` in `bash/` is a manual backup, not deployed by stow
-- `kitty/kitty.conf.back` in the kitty config dir is a manual backup
+- `kitty/kitty.conf.back` is a manual backup
 - No CI, tests, linting, or type checking — purely config management
 - After cloning tmux config, manually install TPM plugins with `Prefix + I`
