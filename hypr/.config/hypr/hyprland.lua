@@ -298,7 +298,7 @@ hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("brave"))
 hl.bind(mainMod .. " + X", hl.dsp.exec_cmd("gnome-calculator"))
 hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd("~/.config/hypr/scripts/show-keybinds.sh"))
 hl.bind(mainMod .. " + ALT + P", toggleEDP)
-hl.bind(mainMod .. " + SPACE",     hl.dsp.exec_cmd("~/.config/hypr/scripts/quick-ask.sh mini"))
+hl.bind(mainMod .. " + G",         hl.dsp.exec_cmd("~/.config/hypr/scripts/quick-ask.sh mini"))
 hl.bind(mainMod .. " + ALT + SPACE", hl.dsp.exec_cmd("~/.config/hypr/scripts/quick-ask.sh pro"))
 
 -- Move focus with mainMod + HJKL
@@ -340,6 +340,11 @@ hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),       { locked = tr
 hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
+
+-- Screenshots
+hl.bind("Print",                hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
+hl.bind(mainMod .. " + Print",     hl.dsp.exec_cmd('grim -g "$(slurp)" ~/Pictures/screenshots/$(date +%Y%m%d_%H%M%S).png'))
+hl.bind(mainMod .. " + ALT + Print", hl.dsp.exec_cmd('grim ~/Pictures/screenshots/$(date +%Y%m%d_%H%M%S).png'))
 
 
 --------------------------------

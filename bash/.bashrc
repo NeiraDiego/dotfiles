@@ -46,7 +46,7 @@ dotcommit() {
 
 
 case "$HOSTNAME" in
-  "diegoUbuntuL")
+  "diegoUbuntuL"|"DiegoArchSV")
     MACHINE_ICON="🏠"
     ;;
   "orangepi5")

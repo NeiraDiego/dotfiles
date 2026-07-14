@@ -206,7 +206,7 @@ bind = $mainMod, B, exec, brave
 bind = $mainMod, X, exec, gnome-calculator
 bind = $mainMod, Z, exec, ~/.config/hypr/scripts/show-keybinds.sh
 bind = $mainMod ALT, P, exec, hyprctl eval 'if hl.get_monitor("eDP-1") ~= nil and not hl.get_monitor("eDP-1").disabled then hl.monitor({ output = "eDP-1", disabled = true }) else hl.monitor({ output = "eDP-1", disabled = false, mode = "preferred", position = "0x0", scale = 1.175 }) end'
-bind = $mainMod, SPACE, exec, ~/.config/hypr/scripts/quick-ask.sh mini
+bind = $mainMod, G, exec, ~/.config/hypr/scripts/quick-ask.sh mini
 bind = $mainMod ALT, SPACE, exec, ~/.config/hypr/scripts/quick-ask.sh pro
 
 # Move focus with mainMod + arrow keys
@@ -263,6 +263,11 @@ bindl  = , XF86AudioNext,        exec, playerctl next
 bindl  = , XF86AudioPause,       exec, playerctl play-pause
 bindl  = , XF86AudioPlay,        exec, playerctl play-pause
 bindl  = , XF86AudioPrev,        exec, playerctl previous
+
+# Screenshots
+bind = , Print, exec, grim -g "$(slurp)" - | wl-copy
+bind = $mainMod, Print, exec, grim -g "$(slurp)" ~/Pictures/screenshots/$(date +%Y%m%d_%H%M%S).png
+bind = $mainMod ALT, Print, exec, grim ~/Pictures/screenshots/$(date +%Y%m%d_%H%M%S).png
 
 ##############################
 ### WINDOWS AND WORKSPACES ###

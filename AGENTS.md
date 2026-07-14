@@ -20,9 +20,9 @@ Run `stow -D <pkg>` to unlink, `stow -R <pkg>` to relink.
 
 | File | Role |
 |---|---|
-| `hypr/.config/hypr/hyprland.conf` | Hyprland native config |
-| `hypr/.config/hypr/hyprland.lua` | Hyprland Lua config — **must be kept in sync with `.conf`** |
-| `hypr/.config/hypr/scripts/` | `show-keybinds.sh`, `toggle-edp.sh`, `wallpaper-carousel.sh`, `quick-ask.sh` |
+| `hypr/.config/hypr/hyprland.lua` | Hyprland Lua config (**active**) |
+| `hypr/.config/hypr/hyprland.conf.bak` | Decommissioned native config (backup) |
+| `hypr/.config/hypr/scripts/` | `show-keybinds.sh`, `wallpaper-carousel.sh`, `quick-ask.sh` |
 | `hypr/CONTEXT.md` | Redirect stub (content migrated here) |
 | `bash/.bashrc` | oh-my-bash, custom `dotcommit` (git add+commit+push), `gitdot` alias |
 | `nvim/.config/nvim/init.lua` | lazy.nvim entrypoint, modules in `lua/config/` and `lua/plugins/` |
@@ -33,32 +33,39 @@ Run `stow -D <pkg>` to unlink, `stow -R <pkg>` to relink.
 
 ## Hyprland
 
-**Critical**: any change to keybinds, monitors, or window rules must go in **both** `hyprland.conf` and `hyprland.lua`.
+**Active config**: `hyprland.lua` (native `.conf` decommissioned as `.conf.bak`)
 
 ### Monitors
-- `DP-1` (external, left): preferred, 0x0, scale 1
-- `eDP-1` (laptop, right): preferred, 1920x0, scale 1.175
+- `DP-3` (external, left): preferred, -1920x0, scale 1
+- `eDP-1` (laptop, right): preferred, 0x0, scale 1.175
 
 ### Autostart (order)
 1. `waybar`
-2. `brave` → workspace 1
-3. `ghostty -e tmux` → workspace 2
+2. `wallpaper-carousel.sh`
+3. `brave` → workspace 1
+4. `kitty -e tmux` → workspace 2
 
 ### Keybindings
-- `SUPER + A` → terminal (ghostty)
+- `SUPER + A` → terminal (kitty)
 - `SUPER + B` → brave
 - `SUPER + D` → dolphin
 - `SUPER + F` → wofi (drun)
 - `SUPER + X` → gnome-calculator
 - `SUPER + C` → close window
 - `SUPER + V` → toggle floating
-- `SUPER + M` → exit
+- `SUPER + M` → obsidian
+- `SUPER + ALT + M` → exit
+- `SUPER + G` → quick-ask (mini)
+- `SUPER + ALT + SPACE` → quick-ask (pro)
 - `SUPER + Z` → show keybinds
 - `SUPER + ALT + P` → toggle eDP-1
 - `SUPER + H/J/K/L` → move focus (left/down/up/right)
 - `SUPER + Q/W/E/R/T/6-0` → workspaces 1-10
 - `SUPER + SHIFT + Q/W/E/R/T/6-0` → move window to workspace
 - `SUPER + S` → scratchpad (special:magic)
+- `Print` → screenshot selection to clipboard
+- `SUPER + Print` → screenshot selection to file
+- `SUPER + ALT + Print` → screenshot fullscreen to file
 - Multimedia: volume (wpctl), brightness (brightnessctl), playback (playerctl)
 - `SUPER + mouse:272` → move window, `SUPER + mouse:273` → resize
 
@@ -119,5 +126,6 @@ After changes, run `fc-cache -fv` and restart Brave.
 - `lazy-lock.json` is gitignored (nvim lazy.nvim lockfile, intentionally untracked)
 - `bashrc-omb-bk` in `bash/` is a manual backup, not deployed by stow
 - `kitty/kitty.conf.back` is a manual backup
+- `hyprland.conf.bak` is decommissioned — `hyprland.lua` is the sole active config
 - No CI, tests, linting, or type checking — purely config management
 - After cloning tmux config, manually install TPM plugins with `Prefix + I`
