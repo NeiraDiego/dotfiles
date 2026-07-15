@@ -67,6 +67,7 @@ hl.on("hyprland.start", function ()
     hl.exec_cmd("~/.config/hypr/scripts/wallpaper-carousel.sh")
     hl.exec_cmd("brave")
     hl.exec_cmd(terminal .. " -e tmux")
+    hl.exec_cmd("sunshine")
 end)
 
 
