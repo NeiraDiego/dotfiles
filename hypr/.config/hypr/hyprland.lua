@@ -10,40 +10,53 @@
 -- require("myColors")
 
 
+--------------------------------
+---- HOST DETECTION ----
+--------------------------------
+
+local function get_hostname()
+    local handle = io.popen("hostname")
+    if handle then
+        local hostname = handle:read("*a"):gsub("%s+", "")
+        handle:close()
+        return hostname
+    end
+    return ""
+end
+
+local HOST = get_hostname()
+local IS_SERVER = (HOST == "DiegoArchSV")
+
+
 ------------------
 ---- MONITORS ----
 ------------------
 
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
---[[ Samsung C27FG70 por descripción (config anterior)
-hl.monitor({
-    output   = "desc:Samsung Electric Company C27FG70 HTHJ200016",
-    mode     = "1920x1080@143.98Hz",
-    position = "1920x0",
-    scale    = 1.2,
-})
--- Monitor del thinkpad: California Institute of Technology 0x1413
-hl.monitor({
-    output   = "",
-    mode     = "preferred",
-    position = "auto",
-    scale    = 1.175,
-})
-]]
 
--- DP-1 izquierda, eDP-1 derecha (ajustar posición X de eDP-1 según resolución real de DP-1)
-hl.monitor({
-    output   = "DP-3",
-    mode     = "preferred",
-    position = "-1920x0",
-    scale    = 1,
-})
-hl.monitor({
-    output   = "eDP-1",
-    mode     = "preferred",
-    position = "0x0",
-    scale    = 1.175,
-})
+if IS_SERVER then
+    -- Servidor headless: pantalla virtual para Sunshine
+    hl.monitor({
+        output   = "HEADLESS-1",
+        mode     = "1920x1080@60",
+        position = "0x0",
+        scale    = 1,
+    })
+else
+    -- PC de escritorio/laptop (DiegoNB)
+    hl.monitor({
+        output   = "DP-3",
+        mode     = "preferred",
+        position = "-1920x0",
+        scale    = 1,
+    })
+    hl.monitor({
+        output   = "eDP-1",
+        mode     = "preferred",
+        position = "0x0",
+        scale    = 1.175,
+    })
+end
 
 
 ---------------------
@@ -65,10 +78,13 @@ local menu        = "wofi --show drun"
 hl.on("hyprland.start", function ()
     hl.exec_cmd("waybar")
     hl.exec_cmd("~/.config/hypr/scripts/wallpaper-carousel.sh")
-    hl.exec_cmd("brave")
-    hl.exec_cmd(terminal .. " -e tmux")
-    hl.exec_cmd("sunshine")
     hl.exec_cmd("nm-applet")
+    if IS_SERVER then
+        hl.exec_cmd("sunshine")
+    else
+        hl.exec_cmd("brave")
+        hl.exec_cmd(terminal .. " -e tmux")
+    end
 end)
 
 
@@ -276,14 +292,16 @@ hl.device({
 
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
--- Toggle eDP-1 laptop monitor
-function toggleEDP()
-  local mon = hl.get_monitor("eDP-1")
-  if mon ~= nil and not mon.disabled then
-    hl.monitor({ output = "eDP-1", disabled = true })
-  else
-    hl.monitor({ output = "eDP-1", disabled = false, mode = "preferred", position = "0x0", scale = 1.175 })
-  end
+-- Toggle eDP-1 laptop monitor (solo en PC con laptop)
+if not IS_SERVER then
+    function toggleEDP()
+        local mon = hl.get_monitor("eDP-1")
+        if mon ~= nil and not mon.disabled then
+            hl.monitor({ output = "eDP-1", disabled = true })
+        else
+            hl.monitor({ output = "eDP-1", disabled = false, mode = "preferred", position = "0x0", scale = 1.175 })
+        end
+    end
 end
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
@@ -299,7 +317,9 @@ hl.bind(mainMod .. " + N", hl.dsp.layout("togglesplit"))    -- dwindle only
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("brave"))
 hl.bind(mainMod .. " + X", hl.dsp.exec_cmd("gnome-calculator"))
 hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd("~/.config/hypr/scripts/show-keybinds.sh"))
-hl.bind(mainMod .. " + ALT + P", toggleEDP)
+if not IS_SERVER then
+    hl.bind(mainMod .. " + ALT + P", toggleEDP)
+end
 hl.bind(mainMod .. " + G",         hl.dsp.exec_cmd("~/.config/hypr/scripts/quick-ask.sh mini"))
 hl.bind(mainMod .. " + ALT + SPACE", hl.dsp.exec_cmd("~/.config/hypr/scripts/quick-ask.sh pro"))
 
