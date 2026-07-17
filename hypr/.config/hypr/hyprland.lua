@@ -68,6 +68,7 @@ hl.on("hyprland.start", function ()
     hl.exec_cmd("brave")
     hl.exec_cmd(terminal .. " -e tmux")
     hl.exec_cmd("sunshine")
+    hl.exec_cmd("nm-applet")
 end)
 
 
