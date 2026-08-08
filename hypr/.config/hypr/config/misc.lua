@@ -26,7 +26,7 @@ hl.config({
     },
 })
 
--- Features CachyOS (decidir en DECISIONS.md B10/B13)
+-- Features CachyOS rechazadas (B10 = N). Se conservan comentadas para referencia.
 -- hl.config({
 --     misc = {
 --         middle_click_paste = false,

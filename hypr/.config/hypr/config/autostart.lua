@@ -15,7 +15,7 @@ hl.on("hyprland.start", function ()
         hl.exec_cmd("sunshine")
     else
         hl.exec_cmd("brave")
-        hl.exec_cmd("kitty -e tmux")
+        hl.exec_cmd("kitty")
     end
 
     -- Barra/panel: noctalia (actual) o waybar, ver DECISIONS.md D1

@@ -21,70 +21,74 @@ Run `stow -D <pkg>` to unlink, `stow -R <pkg>` to relink.
 
 | File | Role |
 |---|---|
-| `hypr/.config/hypr/hyprland.lua` | Hyprland Lua config (**active**) |
+| `hypr/.config/hypr/hyprland.lua` | Hyprland Lua entrypoint (**active**), requires `config/*.lua` |
+| `hypr/.config/hypr/config/` | 12 modules: binds, monitors, autostart, variables, inputs, decorations, animations, colors, misc, environment, windowrules, workspaces |
 | `hypr/.config/hypr/hyprland.conf.bak` | Decommissioned native config (backup) |
-| `hypr/.config/hypr/scripts/` | `show-keybinds.sh`, `wallpaper-carousel.sh`, `quick-ask.sh` |
+| `hypr/.config/hypr/hyprland.lua.monolithic.bak` | Old single-file config (backup) |
+| `hypr/.config/hypr/xdph.conf` | Portal screencopy `allow_token_by_default` |
+| `hypr/.config/hypr/scripts/` | `show-keybinds.sh`, `wallpaper-carousel.sh`, `quick-ask.sh`, `quick-ask.env.example` |
+| `hypr/DECISIONS.md`, `hypr/CACHYOS_LOST.md` | Migration S/N decisions + recoverable CachyOS features (excluded from stow via `.stow-local-ignore`) |
 | `hypr/CONTEXT.md` | Redirect stub (content migrated here) |
 | `bash/.bashrc` | oh-my-bash, custom `dotcommit` (git add+commit+push), `gitdot` alias |
 | `nvim/.config/nvim/init.lua` | lazy.nvim entrypoint, modules in `lua/config/` and `lua/plugins/` |
 | `tmux/.tmux.conf` | TPM plugins (catppuccin, vim-tmux-navigator) |
 | `waybar/.config/waybar/` | `config` (JSON), `style.css`, `scripts/powermenu.sh` |
-| `kitty/.config/kitty/` | `kitty.conf` + `catppuccin/` subtheme |
+| `kitty/.config/kitty/` | `kitty.conf` (`shell tmux new-session -A -s main` → kitty abre con tmux) + `catppuccin/` subtheme |
 | `wofi/.config/wofi/` | `config`, `style.css` (Catppuccin Mocha theme) |
 
 ## Hyprland
 
-**Active config**: `hyprland.lua` (native `.conf` decommissioned as `.conf.bak`)
+**Active config**: `hyprland.lua` entrypoint + `config/*.lua` modules (CachyOS-style modular Lua). Native `.conf` decommissioned as `.conf.bak`.
+
+Host detection: `IS_SERVER = (hostname == "DiegoArchSV")` (headless Sunshine streaming host). On the server only `HEADLESS-1` virtual monitor + `sunshine` autostart.
 
 ### Monitors
 - `DP-3` (external, left): preferred, -1920x0, scale 1
-- `eDP-1` (laptop, right): preferred, 0x0, scale 1.175
+- `eDP-1` (laptop, right): preferred, 0x0, scale **1.57** (re-enable vía `SUPER+ALT+P` también 1.57)
+- `DP-4` / `DP-9` (alternate externals): preferred, -1920x0, scale 1
+- Server: `HEADLESS-1` 1920x1080@60
 
-### Autostart (order)
-1. `waybar`
+### Autostart (`hl.on("hyprland.start")`, UWSM session)
+1. `dbus-update-activation-environment --systemd --all`, `noctalia`, `xhost +SI:localuser:root`
 2. `wallpaper-carousel.sh`
-3. `brave` → workspace 1
-4. `kitty -e tmux` → workspace 2
+3. `nm-applet`
+4. `brave` → workspace 1 (laptop)
+5. `kitty` → workspace 2 (laptop)
+6. `sunshine` (server only)
+
+Bar/panel: **noctalia** (D1 = S). `waybar/` and `wofi/` packages remain stowable but are not the active bar/launcher on this setup.
 
 ### Keybindings
-- `SUPER + A` → terminal (kitty)
-- `SUPER + B` → brave
-- `SUPER + D` → dolphin
-- `SUPER + F` → wofi (drun)
-- `SUPER + X` → gnome-calculator
-- `SUPER + C` → close window
-- `SUPER + V` → toggle floating
-- `SUPER + M` → obsidian
-- `SUPER + ALT + M` → exit
-- `SUPER + G` → quick-ask (mini)
-- `SUPER + ALT + SPACE` → quick-ask (pro)
-- `SUPER + Z` → show keybinds
-- `SUPER + ALT + P` → toggle eDP-1
+- `SUPER + A/B/D/F/X/M/G` → kitty / brave / dolphin / wofi / calculator / obsidian / quick-ask mini
+- `SUPER + ALT + SPACE` → quick-ask (pro); `SUPER + ALT + M` → exit; `SUPER + ALT + P` → toggle eDP-1
+- `SUPER + Z` → noctalia settings (A8 = S)
+- `SUPER + C` → close window; `SUPER + Escape` → `hyprctl kill` (B1 = S)
+- `SUPER + V` → toggle float; `SUPER + P` → pseudo; `SUPER + N` → togglesplit
 - `SUPER + H/J/K/L` → move focus (left/down/up/right)
-- `SUPER + Q/W/E/R/T/6-0` → workspaces 1-10
-- `SUPER + SHIFT + Q/W/E/R/T/6-0` → move window to workspace
-- `SUPER + S` → scratchpad (special:magic)
-- `Print` → screenshot selection to clipboard
-- `SUPER + Print` → screenshot selection to file
-- `SUPER + ALT + Print` → screenshot fullscreen to file
-- Multimedia: volume (wpctl), brightness (brightnessctl), playback (playerctl)
+- `SUPER + Q/W/E/R/T/6-0` → workspaces 1-10; `SUPER + SHIFT + …` → move window to workspace
+- `SUPER + S` → scratchpad (special:magic); `SUPER + SHIFT + S` → move to scratchpad
+- `SUPER + wheel` → cycle workspaces (e±1)
 - `SUPER + mouse:272` → move window, `SUPER + mouse:273` → resize
+- `Print` → noctalia screenshot-region (A17 = S); `SUPER + Print` → noctalia screenshot-fullscreen (A18 = S); `SUPER + ALT + Print` → grim fullscreen to file
+- Multimedia keys (XF86Audio / XF86MonBrightness) → noctalia (A19/A20/A21 = S)
+- Gestures: 3-finger horizontal = workspace (yours); CachyOS (B11 = S): 4-finger horizontal = workspace, 3-finger down = close / up = fullscreen / left = float
 
 ### Workspace rules
 - `brave` / `brave-browser` (class: `^(brave|brave-browser)$`) → workspace 1
-- `com.mitchellh.ghostty` → workspace 2
+- `kitty` (class `^kitty$`) → workspace 2 (opacity 0.93), abre con tmux (sesión `main`)
+- `name:gaming` (B8 = S) → default on primary monitor
+- default_names `q/w/e/r/t` for workspaces 1-5
 
 ### Window rules
-- Brave/Chromium PiP (title: `^Picture in picture$`): float, pin, position `4% 60%`, size `448x252`, keepaspectratio, nodim, noborder, noshadow
-- `org.gnome.Calculator`: float
+- Brave/Chromium PiP (`^Picture in picture$`): float, pin, move `72% 60%`, size `448x252`, keep_aspect_ratio, no_dim, no_shadow
+- `org.gnome.Calculator`, `blueman-manager`: float; `wofi`: opacity 0.90
+- suppress-maximize, fix-xwayland-drags, hyprland-run float
+- CachyOS extras (B13 = S): generic float centering, gaming/Steam rules, dolphin modals, float utilities (pavucontrol, nm-applet, …), opacity overrides, `.exe`/launcher floats on primary monitor
 
 ### Layout
-- dwindle with pseudotile and preserve_split
+- dwindle + `preserve_split` (no global pseudotile; `SUPER + P` toggles pseudo per-window)
 - Border radius: 10px, blur active
-
-### Waybar
-- **Config**: `waybar/.config/waybar/config` — workspaces (left), clock/idle_inhibitor (center), system-tray/pulseaudio/power button (right)
-- **Style**: `waybar/.config/waybar/style.css` — Catppuccin Mocha theme, workspaces synced via Hyprland IPC
+- Colors: gradient border `rgba(33ccffee)` → `rgba(00ff99ee)`, inactive `rgba(595959aa)`
 
 ## Neovim
 
@@ -124,9 +128,11 @@ After changes, run `fc-cache -fv` and restart Brave.
 
 ## Gotchas
 
-- `lazy-lock.json` is gitignored (nvim lazy.nvim lockfile, intentionally untracked)
-- `bashrc-omb-bk` in `bash/` is a manual backup, not deployed by stow
+- `lazy-lock.json` is **tracked** despite the `.gitignore` entry (gitignore doesn't apply to tracked files)
 - `kitty/kitty.conf.back` is a manual backup
-- `hyprland.conf.bak` is decommissioned — `hyprland.lua` is the sole active config
+- `hyprland.conf.bak` and `hyprland.lua.monolithic.bak` are decommissioned backups — active config = `hyprland.lua` + `config/*.lua`
+- `~/.config/hypr.cachyos-backup-*` on the system holds the original CachyOS config (migration 2026-08)
+- NVIDIA env vars live in `~/.config/uwsm/env` (moved from `.bashrc`, D6 = S)
 - No CI, tests, linting, or type checking — purely config management
 - After cloning tmux config, manually install TPM plugins with `Prefix + I`
+- Shell por defecto: **bash** (vía `chsh`). El `.bashrc` es bash-only; `source .bashrc` desde fish falla en la línea 1 (`case` vs `switch`) — si una terminal abre fish, es porque heredó `$SHELL=/bin/fish` de una sesión vieja; fix: logout/login completo. `kitty.conf` lanza `tmux new-session -A -s main` (tmux usa el shell de `/etc/passwd`, bash)

@@ -3,7 +3,7 @@
 TERMINAL     = "kitty"
 FILE_MANAGER = "dolphin"
 BROWSER      = "brave"
-EDITOR       = "gnome-text-editor --new-window"
+EDITOR       = "nvim"   -- D5 = N: se descarta gnome-text-editor
 CALCULATOR   = "gnome-calculator"
 
 -- Monitores (usados por binds de monitor de CachyOS, ver DECISIONS.md B5)

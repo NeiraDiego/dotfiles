@@ -1,0 +1,3 @@
+# Archivos de migración: no se despliegan al sistema (solo viven en el repo)
+^DECISIONS\.md$
+^CACHYOS_LOST\.md$
