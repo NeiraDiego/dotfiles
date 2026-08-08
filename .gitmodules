@@ -1,0 +1,3 @@
+[submodule "kitty/.config/kitty/catppuccin"]
+	path = kitty/.config/kitty/catppuccin
+	url = https://github.com/catppuccin/kitty.git

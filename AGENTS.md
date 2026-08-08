@@ -5,6 +5,7 @@
 Dotfiles managed via [GNU Stow](https://www.gnu.org/software/stow/). Clone to `~/dotfiles`, then:
 
 ```bash
+git submodule update --init   # kitty catppuccin themes (themes/mocha.conf)
 stow bash      # ~/.bashrc
 stow hypr      # ~/.config/hypr/
 stow kitty     # ~/.config/kitty/
