@@ -79,6 +79,7 @@ alias l='ls -CF'
 alias gitdot='cd ~/dotfiles && git add .'
 alias n='nvim .'
 alias cda='source ~/conda/bin/activate'
+alias reload='source ~/.bashrc'
 plugins=(
   git
   bashmarks

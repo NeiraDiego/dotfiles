@@ -25,11 +25,22 @@ hl.window_rule({
 
     float             = true,
     pin               = true,
-    move              = "72% 60%",
-    size              = "448 252",
+    move = {"monitor_w * 0.78", "monitor_h * 0.75"},
+    size = {"monitor_w * 0.2", "monitor_h * 0.2"},
     keep_aspect_ratio = true,
     no_dim            = true,
---    no_border         = true,
+    no_shadow         = true,
+})
+hl.window_rule({
+    name  = "brave-pip",
+    match = { title = "^Pantalla en pantalla$" },
+
+    float             = true,
+    pin               = true,
+    move = {"monitor_w * 0.78", "monitor_h * 0.75"},
+    size = {"monitor_w * 0.2", "monitor_h * 0.2"},
+    keep_aspect_ratio = true,
+    no_dim            = true,
     no_shadow         = true,
 })
 
