@@ -12,6 +12,12 @@ if IS_SERVER then
 else
     -- PC de escritorio/laptop (DiegoNB)
     hl.monitor({
+        output   = "DP-2",
+        mode     = "preferred",
+        position = "0x-1080",
+        scale    = 1,
+    })
+    hl.monitor({
         output   = "DP-3",
         mode     = "preferred",
         position = "-1920x0",
