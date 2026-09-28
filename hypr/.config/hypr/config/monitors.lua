@@ -14,7 +14,10 @@ else
     hl.monitor({
         output   = "DP-2",
         mode     = "preferred",
-        position = "0x-1080",
+        -- para posicion arriba del principal
+        -- position = "0x-1080",
+        -- para posicion a la derecha del principal
+        position = "2256x0",
         scale    = 1,
     })
     hl.monitor({
@@ -26,6 +29,7 @@ else
     hl.monitor({
         output   = "eDP-1",
         mode     = "preferred",
+    -- hyprctl monitor muestra 2256x1504
         position = "0x0",
         scale    = 1.57,
     })
@@ -34,6 +38,7 @@ else
         mode     = "preferred",
         position = "-1920x0",
         scale    = 1,
+        --mirror = "eDP-1",
     })
     hl.monitor({
         output   = "DP-9",

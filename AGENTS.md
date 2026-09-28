@@ -65,7 +65,8 @@ Bar/panel: **noctalia** (D1 = S). `waybar/` and `wofi/` packages remain stowable
 - `SUPER + C` → close window; `SUPER + Escape` → `hyprctl kill` (B1 = S)
 - `SUPER + V` → toggle float; `SUPER + P` → pseudo; `SUPER + N` → togglesplit
 - `SUPER + H/J/K/L` → move focus (left/down/up/right)
-- `SUPER + Q/W/E/R/T/6-0` → workspaces 1-10; `SUPER + SHIFT + …` → move window to workspace
+- `SUPER + Q/W/E/R/T/6-9` → workspaces 1-9; `SUPER + SHIFT + …` → move window to workspace
+- `SUPER + 0` → workspace `name:gaming` (B8 = S); `SUPER + SHIFT + 0` → move window there (ws 10 numérico sin tecla directa)
 - `SUPER + S` → scratchpad (special:magic); `SUPER + SHIFT + S` → move to scratchpad
 - `SUPER + wheel` → cycle workspaces (e±1)
 - `SUPER + mouse:272` → move window, `SUPER + mouse:273` → resize

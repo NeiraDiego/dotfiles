@@ -18,27 +18,23 @@ hl.window_rule({
     workspace = 1,
 })
 
--- Picture-in-Picture (Brave/Chromium)
+-- gcr-prompter = diálogo de gnome-keyring ("Unlock Keyring") → workspace 1
 hl.window_rule({
-    name  = "brave-pip",
-    match = { title = "^Picture in picture$" },
-
-    float             = true,
-    pin               = true,
-    move = {"monitor_w * 0.78", "monitor_h * 0.75"},
-    size = {"monitor_w * 0.2", "monitor_h * 0.2"},
-    keep_aspect_ratio = true,
-    no_dim            = true,
-    no_shadow         = true,
+    name      = "gcr-prompter-workspace",
+    match     = { class = "^(gcr-prompter|gcr_prompter)$" },
+    workspace = 1,
 })
+
+-- Picture-in-Picture (Brave/Chromium). La ventana PiP tiene WM_CLASS vacío
+-- y el título traducido según idioma del navegador (Brave es_ES = "Imagen en imagen").
 hl.window_rule({
     name  = "brave-pip",
-    match = { title = "^Pantalla en pantalla$" },
+    match = { class = "^$", title = "^(Picture in picture|Pantalla en pantalla|Imagen en imagen)$" },
 
     float             = true,
     pin               = true,
-    move = {"monitor_w * 0.78", "monitor_h * 0.75"},
-    size = {"monitor_w * 0.2", "monitor_h * 0.2"},
+    move = {"monitor_w * 0.68", "monitor_h * 0.65"},
+    size = {"monitor_w * 0.3", "monitor_h * 0.3"},
     keep_aspect_ratio = true,
     no_dim            = true,
     no_shadow         = true,

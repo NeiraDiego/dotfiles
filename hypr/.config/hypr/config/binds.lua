@@ -64,12 +64,16 @@ hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 ---- WORKSPACES ------
 -----------------------
 
--- Q/W/E/R/T/6-0 = workspaces 1-10; SHIFT mueve la ventana al workspace
-local workspaceKeys = { "Q", "W", "E", "R", "T", "6", "7", "8", "9", "0" }
+-- Q/W/E/R/T/6-9 = workspaces 1-9; SHIFT mueve la ventana al workspace
+local workspaceKeys = { "Q", "W", "E", "R", "T", "6", "7", "8", "9" }
 for i, key in ipairs(workspaceKeys) do
     hl.bind(mainMod .. " + " .. key,         hl.dsp.focus({ workspace = i }))
     hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
 end
+
+-- B8 (S): 0 = workspace "gaming" (Steam/gamescope); SHIFT mueve la ventana
+hl.bind(mainMod .. " + 0",         hl.dsp.focus({ workspace = "name:gaming" }))
+hl.bind(mainMod .. " + SHIFT + 0", hl.dsp.window.move({ workspace = "name:gaming" }))
 
 -- Scroll por los workspaces existentes
 hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
