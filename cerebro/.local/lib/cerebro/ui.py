@@ -42,6 +42,9 @@ class CerebroWin:
         self.busy = False
         self.cancelled = False
         self.recording = False
+        self.voice_busy = False
+        self.record_process = None
+        self.record_path = None
         self.cloud = False
 
         self.win = Gtk.Window(title="cerebro")
@@ -212,25 +215,55 @@ class CerebroWin:
         self.toast("Modo nube ON (Big Pickle / Zen)" if self.cloud else "Modo local ON", ACCENT)
 
     def toggle_voice(self):
-        if self.recording:
+        if self.voice_busy and not self.recording:
+            self.toast("Transcribiendo…", YELLOW)
             return
+        if self.recording:
+            self.recording = False
+            self.btn_mic.set_label("…")
+            self.hint.set_text("Transcribiendo…")
+            self._run(self._stop_and_ask)
+            return
+        out = str(Path(self.cfg["audio"]["cache_dir"]) / f"query-{time.time_ns()}.wav")
+        try:
+            self.record_process = audio.record_start(out)
+        except Exception as e:
+            self.toast(f"No pude iniciar el micrófono: {e}", RED)
+            return
+        self.record_path = out
         self.recording = True
+        self.voice_busy = True
         self.btn_mic.set_label("⏹")
         self.hint.set_text("Escuchando… Ctrl+L o botón para terminar.")
-        self._run(self._record_and_ask)
+        GLib.timeout_add_seconds(45, self._voice_timeout)
 
-    def _record_and_ask(self):
-        out = str(Path(self.cfg["audio"]["cache_dir"]) / "query.wav")
-        Path(out).parent.mkdir(parents=True, exist_ok=True)
-        audio.record(45, out)
-        self.recording = False
-        self._idle(lambda: self.btn_mic.set_label("🎙"))
+    def _voice_timeout(self):
+        if self.recording:
+            self.toggle_voice()
+        return False
+
+    def _stop_and_ask(self):
         try:
-            text = audio.transcribe(out)
+            audio.record_stop(self.record_process)
+            if not self.record_path or not Path(self.record_path).is_file() or Path(self.record_path).stat().st_size < 1024:
+                raise RuntimeError("no se capturó audio")
+            text = audio.transcribe(self.record_path)
+            if not text:
+                raise RuntimeError("no se detectó voz")
         except Exception as e:
             self.toast(f"STT falló: {e}", RED)
-            return
-        self._idle(self._goto_query, text)
+        else:
+            self._idle(self._goto_query, text)
+        finally:
+            self.record_process = None
+            self.recording = False
+            self.voice_busy = False
+            self._idle(self._voice_finished)
+
+    def _voice_finished(self):
+        self.btn_mic.set_label("🎙")
+        if self.hint.get_text() == "Transcribiendo…":
+            self.hint.set_text("")
 
     def _goto_query(self, text):
         self.hint.set_text("")
@@ -613,6 +646,7 @@ class CerebroWin:
 
     def _on_close(self, *_):
         self.cancelled = True
+        audio.record_cancel(self.record_process)
         return False  # propagar cerrar
 
 

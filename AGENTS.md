@@ -103,11 +103,12 @@ Bar/panel: **noctalia** (D1 = S). `waybar/` and `wofi/` packages remain stowable
 ## Cerebro
 
 - Ops: `cerebro health|selftest|areas|search <q>|web <q>|ask <q>|ui`. `health` valida router/chat/audio/vault; `selftest` comprueba retrieval, JSON del router, negativo y una respuesta grounded.
-- UI = SUPER+G / SUPER+ALT+G. `Ctrl+I`/WEB busca Internet grounded y lista URLs; si no hay notas, `Ctrl+Enter`/LLM pide conocimiento general local y lo etiqueta sin fuentes. `Ctrl+C` copia, `Ctrl+K` guarda snippet, `Ctrl+S` guarda nota, `Ctrl+L` graba/transcribe y `Ctrl+P` alterna nube (sin configurar por defecto).
+- UI = SUPER+G / SUPER+ALT+G. `Ctrl+I`/WEB busca Internet grounded y lista URLs; si no hay notas, `Ctrl+Enter`/LLM pide conocimiento general local y lo etiqueta sin fuentes. `Ctrl+C` copia, `Ctrl+K` guarda snippet, `Ctrl+S` guarda nota, `Ctrl+L` inicia/detiene grabación y transcribe, y `Ctrl+P` alterna nube (sin configurar por defecto).
 - Servicios systemd user: `cerebro-router.service` = llama-server Qwen3-1.7B en :8082; `cerebro-chat.service` = llama-swap en :8080 (modelo `qwen3-14b` GPU / `qwen3-14b-cpu` spawneado en :10001/:10002).
 - Router usa `response_format` json_schema strict (NO gramática GBNF: el 1.7B quemaba tokens en whitespace o regex gigante). `enable_thinking:false` obligatorio en Qwen3.
 - Chat Qwen3-14B en Vulkan (iGPU 860M) ≈ 7 tok/s; GPU eGPU solo CUDA/compute. RAM en uso ~10-12 GB de los 16.
 - Modelos GGUF en `~/.local/share/cerebro/models/`; audio-venv 3.12 con faster-whisper `small` + Kokoro (PyAV pinneado a `av<14`). La prueba TTS→STT pasó: Kokoro `ef_dora` genera WAV PCM mono 24 kHz, faster-whisper `small` lo transcribe.
+- STT caveat: el modelo funciona, pero las entradas internas del Framework están rotas a nivel ALSA/ACP (`DMIC` saturado; ALC285 sin fixup para el SSID). Usar headset/USB/Bluetooth como source por defecto en PipeWire hasta resolver el driver/firmware; no forzar `pw-record --rate 16000` (distorsiona ACP).
 - Guardado UI: notas van a `-Borradores/`; snippets a `Programacion/<lang>/`. Archivos nuevos usan `<lenguaje>_<keyword1>_<keyword2>_<keyword3>.md` (hasta tres keywords, `_2`/`_3` para colisiones); no renombrar existentes porque Obsidian puede enlazarlos.
 - Web retrieval: `config.toml [web].preferred_domains` se consulta primero. Python/pandas usan sus índices Sphinx oficiales; el fallback general Bing RSS solo acepta resultados relevantes. El LLM recibe excerpts + URLs, responde exclusivamente con ese contexto y debe citarlos; la UI lista las fuentes bajo `[Fuentes web]`.
 - CUDA (eGPU 2060) como acelerador de chat = fase futura; `cuda-toolkit` no está en repos, alternativa pip `nvidia-cuda-nvrtc-cu12` + `CUDAToolkit_ROOT`.
