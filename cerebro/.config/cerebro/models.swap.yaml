@@ -1,0 +1,53 @@
+logLevel: info
+healthCheckTimeout: 120
+sendLoadingState: false
+startPort: 10001
+
+# Chat model. llama-swap gestiona el swap entre perfiles CPU/GPU del MISMO GGUF.
+# El router (Qwen3-1.7B) corre por separado en :8082 SIEMPRE caliente.
+# `enable_thinking: false` se fuerza aquí para que Qwen3 no emita razonamiento.
+models:
+  "qwen3-14b":
+    name: "Qwen3 14B Q5_K_M (Vulkan/iGPU)"
+    cmd: |
+      /home/diego/.local/src/llama.cpp/build/bin/llama-server
+      --model /home/diego/.local/share/cerebro/models/Qwen3-14B-Q5_K_M.gguf
+      --host 127.0.0.1 --port 10001
+      -ngl 99 -c 4096 --jinja -np 1 --metrics
+    proxy: http://127.0.0.1:10001
+    ttl: 0
+    filters:
+      setParams:
+        chat_template_kwargs:
+          enable_thinking: false
+        temperature: 0.2
+        max_tokens?: 512
+
+  "qwen3-14b-cpu":
+    name: "Qwen3 14B Q5_K_M (CPU)"
+    cmd: |
+      /home/diego/.local/src/llama.cpp/build/bin/llama-server
+      --model /home/diego/.local/share/cerebro/models/Qwen3-14B-Q5_K_M.gguf
+      --host 127.0.0.1 --port 10002
+      -ngl 0 -c 4096 --jinja -np 1 --metrics
+    proxy: http://127.0.0.1:10002
+    ttl: 0
+    filters:
+      setParams:
+        chat_template_kwargs:
+          enable_thinking: false
+        temperature: 0.2
+        max_tokens?: 512
+
+# Los dos perfiles nunca co-existen: usar uno descarga el otro.
+routing:
+  router:
+    use: group
+    settings:
+      groups:
+        "chat-tiers":
+          swap: true
+          exclusive: true
+          members:
+            - "qwen3-14b"
+            - "qwen3-14b-cpu"

@@ -4,6 +4,16 @@
 -- específicas para que PiP/calculadora conserven su posición propia)
 hl.window_rule({ match = { float = true }, center = true, persistent_size = true })
 
+-- cerebro (quick-ask 2.0): lanzador GTK4 flotante centrado
+hl.window_rule({
+    name      = "cerebro-launcher",
+    match     = { class = "^ar\\.cl\\.cerebro$" },
+    float     = true,
+    center    = true,
+    size      = { "860", "600" },
+    persistent_size = true,
+})
+
 -- Workspace assignments
 hl.window_rule({
     name      = "kitty-workspace",

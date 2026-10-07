@@ -107,3 +107,17 @@ hago `stow`.
   respuestas, hago backup de `~/.config/hypr` actual y `stow hypr`.
 - `hyprland.lua.monolithic.bak` conserva tu config anterior de un solo archivo.
 - Este archivo se puede borrar al terminar la migración.
+
+---
+
+## Adenda 2026-10: quick-ask → cerebro
+
+- `quick-ask.sh` (mini/pro con wofi + Ollama remoto 192.168.30.110) quedó
+  **DEPRECADO**: wofi no está instalado y el Ollama remoto está caído.
+- Reemplazo: **`cerebro ui`** (lanzador GTK4; router Qwen3-1.7B + chat
+  Qwen3-14B local + retrieval sobre `~/Notas` + voz). Binds: `SUPER+G` y
+  `SUPER+ALT+G` → `cerebro ui` (se movió de `SUPER+ALT+SPACE` para no pisar
+  `grp:win_space_toggle`). Ventana flotante centrada 860x600
+  (`windowrules.lua`). Dentro de la UI: `Ctrl+C` copiar, `Ctrl+K` snippet,
+  `Ctrl+S` nota, `Ctrl+L` voz, `Ctrl+P` nube; prefijo `!` → buscar en web.
+- Definición técnica completa en `AGENTS.md` → `## Cerebro`.

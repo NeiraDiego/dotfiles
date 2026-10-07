@@ -1,0 +1,49 @@
+# Configuración de cerebro
+# Rutas absolutas porque este vault vive en una sola máquina (DiegoNB).
+
+[chat]
+base_url = "http://127.0.0.1:8080/v1"
+model = "qwen3-14b"        # alternativas: "qwen3-14b-cpu"
+max_tokens = 512
+temperature = 0.2
+
+[router]
+base_url = "http://127.0.0.1:8082/v1"
+max_tokens = 256
+
+[audio]
+venv_python = "/home/diego/.local/share/cerebro/audio-venv/bin/python"
+whisper_model = "small"
+whisper_lang = "es"
+tts_voice = "ef_dora"
+cache_dir = "/home/diego/.cache/cerebro"
+
+[brain]
+vault = "/home/diego/Notas"
+# Carpetas top-level que nunca se indexan (privacidad). Se aplica como glob.
+excludes = ["-Borradores", "z.Adjuntos", ".trash", ".obsidian", ".git", ".cerebro-ignore"]
+
+[areas]
+# Carpetas top-level indexadas por defecto (default-deny: lo no declarado abre diálogo).
+known = [
+    "Programacion",
+    "Tecnologia_y_linux",
+    "RL",
+    "Tesis_Compact_Polylla",
+    "Crecimiento_personal",
+    "Excalidraw",
+    "UdeC_MCC",
+]
+
+[notas]
+inbox = "-Borradores"      # notas rápidas van a tu inbox actual de Obsidian
+
+[web]
+# Se consultan estos dominios antes de abrir la búsqueda al resto de Internet.
+preferred_domains = ["docs.python.org", "pandas.pydata.org", "www.w3schools.com"]
+max_sources = 4
+chars_per_source = 6000
+timeout_seconds = 12
+
+# [cloud]
+# base_url = "http://127.0.0.1:11434/v1"   # modo nube (Ctrl+P en la UI); antes era el Ollama remoto

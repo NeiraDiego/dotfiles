@@ -1,0 +1,4 @@
+#!/bin/sh
+# cerebro: CLI + GUI (Python del sistema, que trae PyGObject/GTK4)
+export PYTHONPATH="${PYTHONPATH:+$PYTHONPATH:}$HOME/.local/lib"
+exec python3 -m cerebro.cli "$@"

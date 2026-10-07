@@ -1,4 +1,7 @@
 #!/bin/bash
+# DEPRECADO (2026-10): reemplazado por `cerebro ui` (SUPER+G / SUPER+ALT+G).
+# wofi no está instalado y el Ollama remoto 192.168.30.110 está caído.
+# Se conserva como referencia; los binds apuntan a cerebro.
 
 OLLAMA_HOST="192.168.30.110:11434"
 OLLAMA_TIMEOUT=2

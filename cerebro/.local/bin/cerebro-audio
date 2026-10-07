@@ -1,0 +1,4 @@
+#!/bin/sh
+# cerebro-audio: STT (faster-whisper) y TTS (kokoro) corren en el venv 3.12
+# porque kokoro exige Python < 3.13 y el sistema usa 3.14.
+exec "$HOME/.local/share/cerebro/audio-venv/bin/python" "$HOME/.local/lib/cerebro/audio_worker.py" "$@"

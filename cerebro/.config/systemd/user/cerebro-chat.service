@@ -1,0 +1,12 @@
+[Unit]
+Description=cerebro chat (llama-swap, Qwen3-14B)
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/llama-swap --config %h/.config/cerebro/models.swap.yaml --listen 127.0.0.1:8080
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

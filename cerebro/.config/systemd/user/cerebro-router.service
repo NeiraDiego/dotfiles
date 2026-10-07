@@ -1,0 +1,12 @@
+[Unit]
+Description=cerebro router (Qwen3-1.7B, parseo de consultas, siempre caliente)
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/src/llama.cpp/build/bin/llama-server --model %h/.local/share/cerebro/models/Qwen3-1.7B-Q4_K_M.gguf --host 127.0.0.1 --port 8082 -ngl 99 -c 2048 --jinja -np 1
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
