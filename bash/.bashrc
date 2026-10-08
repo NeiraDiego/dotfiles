@@ -60,6 +60,36 @@ case "$HOSTNAME" in
     ;;
 esac
 
+# hace add, commit y push de notas
+notascommit() {
+    local prev_dir=$(pwd)
+    cd ~/notas || return 1
+    
+    # Agregar todos los cambios
+    git add .
+    
+    # Mostrar el estado
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Archivos modificados:"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    git status --short
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"    
+    
+    # Hacer commit y push
+    git commit -m "notas $(date +%y-%m-%d-%H:%M:%S)"
+    
+    if [ $? -eq 0 ]; then
+        echo "Haciendo push..."
+        git push
+        echo "✅ Notas actualizadas!"
+    else
+        echo "❌ Error en el commit"
+    fi
+    
+    cd "$prev_dir"
+}
+
+
 # Activar mostrar ambientes de Python/Conda
 OMB_PROMPT_SHOW_PYTHON_VENV=true
 

@@ -40,6 +40,12 @@ def _filename(title, lang="", keywords=()):
     return "_".join(parts) or "nota"
 
 
+def _quick_filename(title):
+    """Nombre literal de una nota rápida: el título con espacios como `_`."""
+    safe = re.sub(r"[\\/:\x00]", "", title.strip())
+    return re.sub(r"\s+", "_", safe).strip("._") or "nota"
+
+
 def _fm(title, area, lang, tags, kind, source="cerebro"):
     today = datetime.date.today().isoformat()
     tags_txt = ", ".join(f'"{t.strip().lstrip("#")}"' for t in tags if t.strip())
@@ -63,6 +69,18 @@ def note(title, body, cfg=None, area=None, lang="", tags=(), keywords=(), unique
     if dest.exists() and not unique:
         raise FileExistsError(f"{dest} ya existe")
     _write(dest, text)
+    return dest
+
+
+def quick_note(markdown, cfg=None):
+    """Guarda Markdown sin frontmatter; la primera línea `# Título` nombra el archivo."""
+    cfg = cfg or cfgmod.load()
+    lines = markdown.splitlines()
+    if not lines or not re.match(r"^#\s+\S", lines[0]):
+        raise ValueError("la primera línea debe ser un título Markdown: # Título")
+    title = lines[0][1:].strip()
+    dest = _destination(_vault(cfg) / cfg["notas"]["inbox"], _quick_filename(title), True)
+    _write(dest, markdown.rstrip() + "\n")
     return dest
 
 

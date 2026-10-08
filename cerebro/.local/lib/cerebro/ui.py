@@ -29,6 +29,7 @@ window.cerebro {{ background: {BG}; color: {FG}; border: 1px solid {BORDER}; bor
 .c-answer {{ color: {FG}; font-family: monospace; }}
 .c-src {{ color: {ACCENT}; }}
 .c-tooltip {{ color: {YELLOW}; }}
+.c-note {{ background: {BG}; color: {FG}; font-family: monospace; }}
 """
 
 
@@ -46,6 +47,8 @@ class CerebroWin:
         self.record_process = None
         self.record_path = None
         self.cloud = False
+        self.note_mode = False
+        self._heading_guard = False
 
         self.win = Gtk.Window(title="cerebro")
         self.win.set_default_size(940, 620)
@@ -60,7 +63,7 @@ class CerebroWin:
         self.win.set_default_size(940, 620)
 
         self.win.connect("close-request", self._on_close)
-        self.set_status("¿Qué necesitas?  Ctrl+I=web  Ctrl+C=copiar  Ctrl+K=snippet  Ctrl+S=nota  Ctrl+L=voz  Ctrl+P=nube")
+        self.set_status("¿Qué necesitas?  Ctrl+N=nota rápida  Ctrl+I=web  Ctrl+C=copiar  Ctrl+K=snippet  Ctrl+S=nota  Ctrl+L=voz  Ctrl+P=nube")
 
     def _build(self):
         root = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -88,7 +91,16 @@ class CerebroWin:
         self.outbox.append(self.answer_lbl)
         self.outbox.append(self.sources_lbl)
 
+        self.note_editor = Gtk.TextView(vexpand=True, wrap_mode=Gtk.WrapMode.WORD_CHAR)
+        self.note_editor.add_css_class("c-note")
+        self.note_editor.set_monospace(True)
+        self.note_editor.set_size_request(-1, 420)
+        self.note_editor.get_buffer().connect("changed", self._ensure_note_heading)
+        self.note_editor.set_visible(False)
+        self.outbox.append(self.note_editor)
+
         row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        self.controls_row = row
         row.set_margin_top(6)
         self.entry = Gtk.Entry(hexpand=True, placeholder_text="Pregunta o busca en tus notas…")
         self.entry.connect("activate", self.on_enter)
@@ -142,7 +154,8 @@ class CerebroWin:
         self._keymap = {
             (ctrl, Gdk.KEY_c): self.copy_answer,
             (ctrl, Gdk.KEY_k): self.snippet_flow,
-            (ctrl, Gdk.KEY_s): self.note_flow,
+            (ctrl, Gdk.KEY_s): self.save_note_shortcut,
+            (ctrl, Gdk.KEY_n): self.begin_quick_note,
             (ctrl, Gdk.KEY_l): self.toggle_voice,
             (ctrl, Gdk.KEY_p): self.toggle_cloud,
             (ctrl, Gdk.KEY_i): self.web_flow,
@@ -158,6 +171,14 @@ class CerebroWin:
             | Gdk.ModifierType.SUPER_MASK
             | Gdk.ModifierType.SHIFT_MASK
         )
+        if self.note_mode:
+            if (mods, keyval) == (Gdk.ModifierType.CONTROL_MASK, Gdk.KEY_s):
+                self.save_quick_note()
+                return True
+            if keyval == Gdk.KEY_Escape:
+                self.end_quick_note()
+                return True
+            return False
         for (m, k), fn in self._keymap.items():
             if (m, k) == (mods, keyval):
                 if self.busy and fn not in (self.copy_answer, self.toggle_cloud):
@@ -200,6 +221,70 @@ class CerebroWin:
     def _idle(self, fn, *args):
         """Ejecuta una actualización GTK desde un hilo de trabajo."""
         GLib.idle_add(fn, *args)
+
+    # ---- nota rápida ----
+    def _ensure_note_heading(self, buffer):
+        """La primera línea siempre es un título Markdown válido."""
+        if self._heading_guard:
+            return
+        start, end = buffer.get_bounds()
+        text = buffer.get_text(start, end, True)
+        if text.startswith("# "):
+            return
+        self._heading_guard = True
+        if text.startswith("#"):
+            text = text[1:].lstrip(" ")
+        buffer.set_text("# " + text.lstrip("\n"))
+        self._heading_guard = False
+
+    def begin_quick_note(self):
+        if self.busy:
+            self.toast("Esperá a que termine la consulta.", RED)
+            return
+        if self.note_mode:
+            self.note_editor.grab_focus()
+            return
+        self.note_mode = True
+        self.answer_lbl.set_visible(False)
+        self.sources_lbl.set_visible(False)
+        self.note_editor.set_visible(True)
+        self.controls_row.set_visible(False)
+        self.hint.set_text("Nota rápida: la primera línea es el título (# Título). Ctrl+S guarda; Esc cancela.")
+        self.set_status("Escribí la nota. Se guardará en -Borradores/ con el título como nombre de archivo.")
+        buffer = self.note_editor.get_buffer()
+        buffer.set_text("# ")
+        buffer.place_cursor(buffer.get_end_iter())
+        self.note_editor.grab_focus()
+
+    def end_quick_note(self):
+        if not self.note_mode:
+            return
+        self.note_mode = False
+        self.note_editor.set_visible(False)
+        self.answer_lbl.set_visible(True)
+        self.sources_lbl.set_visible(True)
+        self.controls_row.set_visible(True)
+        self.hint.set_text("")
+        self.set_status("¿Qué necesitas?  Ctrl+N=nota rápida  Ctrl+I=web  Ctrl+L=voz")
+        self.entry.grab_focus()
+
+    def save_note_shortcut(self):
+        if self.note_mode:
+            self.save_quick_note()
+        else:
+            self.note_flow()
+
+    def save_quick_note(self):
+        buffer = self.note_editor.get_buffer()
+        start, end = buffer.get_bounds()
+        markdown = buffer.get_text(start, end, True)
+        try:
+            dest = notes.quick_note(markdown, self.cfg)
+        except Exception as e:
+            self.toast(f"nota: {e}", RED)
+            return
+        self.end_quick_note()
+        self.toast(f"Nota guardada: {dest}", GREEN)
 
     # ---- nube / voz ----
     @property

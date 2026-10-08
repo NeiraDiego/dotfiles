@@ -8,12 +8,12 @@ startPort: 10001
 # `enable_thinking: false` se fuerza aquí para que Qwen3 no emita razonamiento.
 models:
   "qwen3-14b":
-    name: "Qwen3 14B Q5_K_M (Vulkan/iGPU)"
+    name: "Qwen3 14B Q5_K_M (CUDA/RTX 2060)"
     cmd: |
-      /home/diego/.local/src/llama.cpp/build/bin/llama-server
+      /home/diego/.local/src/llama.cpp/build-cuda/bin/llama-server
       --model /home/diego/.local/share/cerebro/models/Qwen3-14B-Q5_K_M.gguf
       --host 127.0.0.1 --port 10001
-      -ngl 99 -c 4096 --jinja -np 1 --metrics
+      -ngl 16 -c 4096 --jinja -np 1 --metrics
     proxy: http://127.0.0.1:10001
     ttl: 0
     filters:
