@@ -61,7 +61,7 @@ case "$HOSTNAME" in
 esac
 
 # hace add, commit y push de notas
-notascommit() {
+notescommit() {
     local prev_dir=$(pwd)
     cd ~/notas || return 1
     
@@ -108,6 +108,7 @@ alias la='ls -A'
 alias l='ls -CF'
 alias gitdot='cd ~/dotfiles && git add .'
 alias n='nvim .'
+alias notes='nvim ~/Notas'
 alias cda='source ~/conda/bin/activate'
 alias reload='source ~/.bashrc'
 plugins=(

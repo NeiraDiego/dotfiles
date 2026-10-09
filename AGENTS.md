@@ -30,7 +30,7 @@ Run `stow -D <pkg>` to unlink, `stow -R <pkg>` to relink.
 | `hypr/.config/hypr/scripts/` | `show-keybinds.sh`, `wallpaper-carousel.sh`, `quick-ask.sh` (DEPRECATED → `cerebro ui`), `quick-ask.env.example` |
 | `hypr/DECISIONS.md`, `hypr/CACHYOS_LOST.md` | Migration S/N decisions + recoverable CachyOS features (excluded from stow via `.stow-local-ignore`) |
 | `hypr/CONTEXT.md` | Redirect stub (content migrated here) |
-| `bash/.bashrc` | oh-my-bash, custom `dotcommit` (git add+commit+push), `gitdot` alias |
+| `bash/.bashrc` | oh-my-bash, custom `dotcommit` / `notescommit` (git add+commit+push), `gitdot` / `notes` aliases |
 | `nvim/.config/nvim/init.lua` | lazy.nvim entrypoint, modules in `lua/config/` and `lua/plugins/` |
 | `tmux/.tmux.conf` | TPM plugins (catppuccin, vim-tmux-navigator) |
 | `waybar/.config/waybar/` | `config` (JSON), `style.css`, `scripts/powermenu.sh` |
@@ -119,6 +119,8 @@ Bar/panel: **noctalia** (D1 = S). `waybar/` and `wofi/` packages remain stowable
 ```bash
 gitdot    # alias: cd ~/dotfiles && git add .
 dotcommit # interactive: git add . → git commit → git push
+notes     # alias: nvim ~/Notas
+notescommit # add, commit y push de ~/notas
 ```
 
 ## Fonts
