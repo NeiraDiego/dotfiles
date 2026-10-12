@@ -35,11 +35,11 @@ hl.window_rule({
     workspace = 1,
 })
 
--- Picture-in-Picture (Brave/Chromium). La ventana PiP tiene WM_CLASS vacío
--- y el título traducido según idioma del navegador (Brave es_ES = "Imagen en imagen").
+-- Picture-in-Picture (Brave/Chromium). Brave conserva la clase del navegador
+-- y traduce el título según su idioma (es_ES = "Imagen en imagen").
 hl.window_rule({
     name  = "brave-pip",
-    match = { class = "^$", title = "^(Picture in picture|Pantalla en pantalla|Imagen en imagen)$" },
+    match = { title = "^(Picture in picture|Pantalla en pantalla|Imagen en imagen)$" },
 
     float             = true,
     pin               = true,

@@ -3,6 +3,8 @@ case $- in
     *) return;;
 esac
 export OSH='/home/diego/.oh-my-bash'
+export EDITOR='nvim'
+export VISUAL='nvim'
 
 # hace add, commit y push de los archivos dot
 dotcommit() {
@@ -150,3 +152,4 @@ export PATH=/home/diego/.opencode/bin:$PATH
 
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+export BROWSER=brave
